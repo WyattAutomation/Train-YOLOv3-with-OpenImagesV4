@@ -168,12 +168,19 @@ Create the cfg by making a copy of the existing yolov3.cfg file in the /darknet/
 
 Edit that new cfg as follows:
 -Line 3: set batch=16, this means we will be using 16 images for every training step
+
 -Line 4: set subdivisions=16, the batch will be divided by 16 to decrease GPU VRAM requirements.
+
 -Line 603: set filters=(numberOfclasses + 5)*3 in our case (for one object) filters=18
+
 -Line 610: set classes=1, the number of categories we want to detect
+
 -Line 689: set filters=(numberOfclasses + 5)*3 in our case filters=18
+
 -Line 696: set classes=1, the number of categories we want to detect
+
 -Line 776: set filters=(numberOfclasses + 5)*3 in our case filters=18
+
 -Line 783: set classes=1, the number of categories we want to detect
 
 Save that after making the changes, sitck it in darknet/cfg.
