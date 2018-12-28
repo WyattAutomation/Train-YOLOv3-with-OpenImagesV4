@@ -207,7 +207,7 @@ Make sure that you change "sbubby" here to your username, and/or change the dire
 ```
 -Copy CSVheadstoTXT.py to the same directory as the .jpg files you downloaded.  For me in this example I copied like this: 
 ```
-cp CSVheadstoTXT.py /home/sbubby/Desktop/oiheadpics/OIDv4_ToolKit/OID/Dataset/test/Human \head
+cp CSVheadstoTXT.py /home/sbubby/Desktop/oiheadpics/OIDv4_ToolKit/OID/Dataset/train/Human \head
 ```
 -Obviously change the above to the right directory on your machine, then cd to that directory above and run it:
 ```
