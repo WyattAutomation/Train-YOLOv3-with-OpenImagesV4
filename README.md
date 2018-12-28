@@ -52,10 +52,11 @@ The other information in these CSVs, we will not use here.
 
 It's important to note that these CSV files contain this information for ALL of the photos in the Open Images Dataset, but don't worry as I've included tools here to get information only about the photos we are downloading, and to refine that info even further to fully prepare the data.
 
-If you start downloading and see a bunch of aws or other errors flying accross the console, it isn't working.  It should just look like a little download-progress bar in the terminal.
+If you start downloading and see a bunch of aws or other errors flying accross the terminal that move too fast to read, it isn't working correctly.  It should just look like download-progress bars in the terminal like this:
+![Alt Text](https://github.com/WyattAutomation/Train-YOLOv3-with-OpenImagesV4/blob/master/dlimage.png?raw=true)
 
 If you downloaded Human_head, and you cloned the OIDv4Toolkit/ folder to your desktop you should have a directory structure like this:
-
+```
 main_folder
 │   main.py
 │
@@ -109,31 +110,42 @@ main_folder
                           |2fe4f21e409f0a56.txt
                           |...
               
+```
+Note that it will create a directory called "labels" that we do not need, you can ignore the txt files and that directory as they are not used.  There is an option to not create them as well, but it doesn't hurt anything if they do get created.  Also note that the names in the files above are just arbitrary names here for demonstration purposes.
 
-Note that it will create a directory called "labels" that we do not need, you can ignore the txt files and that directory as they are not used.  Also note that the names in the files above are just random names here for demonstration purposes.
 
 
+## Create the .data, the .cfg, and the .names files:
 
-Create the .data, the .cfg, and the .names files:
-
-I want to train mine to reconize one object, 'Human head', so I created a text file in the /darknet/cfg/ directory of yolo and named it 'head.data' containing the following:
+If wanted to train mine to reconize one object, 'Human head', so I created a text file in the /darknet/cfg/ directory of yolo and named it 'head.data' containing the following:
+```
 classes= 1
 train  = /home/sbubby/train.txt
 valid  = /home/sbubby/test.txt
 names = data/head.names
 backup = /home/sbubby/backup
-
-	-classes is '1' as I'm only training mine to detect human head
-	-train.txt is a text file that lists the full directory where each photo is that you downloaded; we'll go through the process of creating that later. 
+```
+	-classes is '1' as I'm only training mine to detect 'Human head'
+	
+	-train.txt is a single text file that lists the full directory where each photo is that you downloaded; we'll go
+	through the process of creating that later. 
+	
 	-test.txt; same as above and this is created along with the train.txt file in a later process
-	-head.names: a text file that you name "whateveryouwant.names", that contains a list of the names of the objects that you are going to train yolo to detect.  Since we are only training it to detect "Human head", that file should just contain:
-		Human head
 	
-	at the top, with a space after it (not indented or anything too, just at the top left).  If you were doing this for 2 objects like Human head and Human hand, it'd be like:
-		Human head
-		Human hand
-	
-	-backup is just a folder where you want the weights to be stored.  Make sure this folder exists, and that you don't put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
+	-head.names: a text file that you name "whateveryouwant.names", that contains a list of the names of the objects
+	that you are going to train yolo to detect.  Since we are only training it to detect "Human head", that file should
+	just contain:
+	```
+	Human head
+	```
+	at the top, with a space after it (not indented or anything too, just at the top left).  If you were doing this for
+	2 objects like Human head and Human hand, it'd be like:
+	```
+	Human head
+	Human hand
+	```
+	-backup is just a folder where you want the weights to be stored.  Make sure this folder exists, and that you don't
+	put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
 
 Note that 'sbubby' is my username, change that to yours for whatever the directories of the files you use here are located.  You can put the test.txt, train.txt, and backup folder wherever, as long as this file points to their locations.
 
