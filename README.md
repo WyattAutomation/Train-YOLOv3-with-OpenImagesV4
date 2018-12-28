@@ -65,7 +65,7 @@ If you start downloading and see a bunch of aws or other errors flying accross t
 
 If you downloaded Human_head, and you cloned the OIDv4Toolkit/ folder to your desktop you should have a directory structure like this:
 ```
-main_folder
+OIDv4_ToolKit
 │   main.py
 │
 └───OID
