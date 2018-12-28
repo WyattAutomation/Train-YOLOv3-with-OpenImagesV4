@@ -237,8 +237,8 @@ The script should take care of all of this for you, as long as the directories a
 **IMPORTANT TO NOTE: *MANY* other tutorials on training Yolov3 on your own datasets include x and y pixel values that have to be converted to 0-1 relative values.  So if you had a photo width of 1280, the "absolute x" value for the mid point would be 640, and the "realtive x" for the mid point would be .5 .  Open Images already uses values between 0 and 1 in their annotations, 0 being the lowest possible value in the whole photo for x or y, and 1 being the highest possible value.  These are called "relative" x and y, as they represent the grid locations of things in the photo by values of 0-1 along the x and y axies relative to a percetage of the max x or y, rather than pixel value coordinates. This is due to the fact that the photos in this huge dataset are of many different sizes.  Anyway, if you come accross tutorials claiming that you need to calculate the "relative" values, like what 714/1280 is for the mid points, DON'T DO THAT HERE!!  The data is already in the correct format!
 
 
-## Create the single txt for your.data file, containing all the images paths:
--In the /OID/dataset/train folder, copy proccess.py and change line 5 to the directory where the .jpg files for the training dataset for the object are.  For me, this looked like:
+## Create the single txt for your '.data' file, containing all the images paths:
+-In process.py, change line 5 to the directory where the .jpg files for the training dataset for the object are.  For me, this looked like:
 ```
 current_dir = '/home/sbubby/Desktop/OIDv4_ToolKit/train/Human head'
 ```
