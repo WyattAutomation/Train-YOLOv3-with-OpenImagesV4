@@ -1,6 +1,207 @@
 # Training YOLOv3 to detect specific objects using Google's OpenImagesV4
 
-## Brief description:
 This is a detailed tutorial on how to download one or more specific object's photos with annotations, from Google's Open ImagesV4 Dataset, and how to fully and correctly prepare that data to train PJReddie's YOLOv3.  This how I trained this model to detect "Human head", as seen in the GIF below:
 
-![](https://i.imgur.com/dYgpwoc.gifv)
+![Alt Text](https://github.com/WyattAutomation/Train-YOLOv3-with-OpenImagesV4/blob/master/yoloDemo.gif?raw=true)
+
+## Getting Started
+Make sure you have PJReddie's YoloV3 installed, compiled with CUDA and OpenCV, and working with your webcam for live video.  The version of YoloV3 I am using installed is from here:
+```
+https://pjreddie.com/darknet/yolo/
+```
+I'm using CUDA Toolkit 10.0 with the 410 version of the NVidia Driver, on Ubuntu18.04, and use Python 3.6.  My GPU is an NVidia gtx 1060 (6GB model).  I won't go into details too much with getting YOLOv3 working, as that is not the intent of this document.
+
+
+## Downloading Photos Containing only Specific Classes of Objects from the Open Images Dataset:
+
+If you don't want to download the entire Google Open Images Dataset, and just need photos and annotations containing one or a few objects that you can seach for on their "Explore" page, we will explain how to do this first. (The 'explore' page I'm talking about is found here: https://storage.googleapis.com/openimages/web/visualizer/index.html?)
+
+## OIDv4 Tookit
+There are several ways to do this but I will explain the easiest that I've found so far, which is by using the OIDv4toolkit, This is a downloader tool specifically made for this purpose (https://github.com/EscVM/OIDv4_ToolKit).  The documentation on their GitHub isn't entirely accurate, so please follow my instructions here!
+
+Clone the repo to whatever directory you want.  Desktop is fine:
+```
+git clone https://github.com/EscVM/OIDv4_ToolKit.git
+```
+Check the "requirements.txt" file for the dependencies.  I would reccomend against running "pip3 install -r requirements.txt"; if you are running a custom compiled version of OpenCV like I am, and are not using a Python virtual env, it can screw things up pretty badly, so just open requirements.txt and install each manually, skipping things you know you already have.  It's all very common stuff and you probably already have it installed anyway.
+
+Once you have the requirements installed, it's time to run the downloader (main.py from the root directory of the tool).
+
+For example, below is how to clone the repo for OIDv4 and use it.  Note that the correct command below uses "downloader" and not "download" like the documentation on the OIDv4 GitHub erroneously states.  Also note, if there is a space in the class name like "Human head" type it like "Human_head" below:
+```
+python3 main.py downloader --classes Human_hand --type_csv all
+```
+If it asks:
+```
+[ERROR] Missing the train-annotations-bbox.csv file.
+[DOWNLOAD] Do you want to download the missing file? [Y/n] 
+```
+Answer Y to all 3 of these, whenever you encounter them (it should prompt just before it downloads the training, test, and validation CSV files).
+
+### Annotation CSVs Explained
+These files it asks to download are the CSV files (that I will refer to as 'annotation CSVs') that contain the information about where the objects are (the bounding boxes of the objects) in the corresponding photos you're downloading.  The important information on each row of this CSV includes:
+
+-ImageID - the name of the actual .jpg file in the dataset, without '.jpg' on the end
+-LabelName - a 'Label Name' which is just a label that looks like '/m/04hgtk' and represents the type of object that's in the photo.  You can open 'class-descriptions-boxable.csv' in a text editor and search for the object you want and find it's LabelName
+-XMin - lowest value of X for the bounding box (box that conatins object) that the object is in
+-XMax - highest value of X for the bounding box that the object is in
+-Ymin - lowest value of Y for the bounding box that the object is in
+-Ymax - highest value of Y for the bounding box that the object is in
+
+The other information in these CSVs, we will not use here.
+
+It's important to note that these CSV files contain this information for ALL of the photos in the Open Images Dataset, but don't worry as I've included tools here to get information only about the photos we are downloading, and to refine that info even further to fully prepare the data.
+
+If you start downloading and see a bunch of aws or other errors flying accross the console, it isn't working.  It should just look like a little download-progress bar in the terminal.
+
+If you downloaded Human_head, and you cloned the OIDv4Toolkit/ folder to your desktop you should have a directory structure like this:
+
+main_folder
+│   main.py
+│
+└───OID
+    │
+    └───csv_folder
+    |    │   class-descriptions-boxable.csv
+    |    │   validation-annotations-bbox.csv
+    |	 |	 test-annotations-bbox.csv	
+    |	 |	 train-annotations-bbox.csv
+    └───Dataset
+        |
+        └─── test
+             |
+             └───Human head
+                   |
+                   |0fdea8a716155a8e.jpg
+                   |2fe4f21e409f0a56.jpg
+                   |...
+                   └───Labels
+                          |
+                          |0fdea8a716155a8e.txt
+                          |2fe4f21e409f0a56.txt
+                          |...
+              
+        |
+        └─── train
+             |
+             └───Human head
+                   |
+                   |0fdea8a716155a8e.jpg
+                   |2fe4f21e409f0a56.jpg
+                   |...
+                   └───Labels
+                          |
+                          |0fdea8a716155a8e.txt
+                          |2fe4f21e409f0a56.txt
+                          |...
+              
+        |
+        └─── validation
+             |
+             └───Human head
+                   |
+                   |0fdea8a716155a8e.jpg
+                   |2fe4f21e409f0a56.jpg
+                   |...
+                   └───Labels
+                          |
+                          |0fdea8a716155a8e.txt
+                          |2fe4f21e409f0a56.txt
+                          |...
+              
+
+Note that it will create a directory called "labels" that we do not need, you can ignore the txt files and that directory as they are not used.  Also note that the names in the files above are just random names here for demonstration purposes.
+
+
+
+Create the .data, the .cfg, and the .names files:
+
+I want to train mine to reconize one object, 'Human head', so I created a text file in the /darknet/cfg/ directory of yolo and named it 'head.data' containing the following:
+classes= 1
+train  = /home/sbubby/train.txt
+valid  = /home/sbubby/test.txt
+names = data/head.names
+backup = /home/sbubby/backup
+
+	-classes is '1' as I'm only training mine to detect human head
+	-train.txt is a text file that lists the full directory where each photo is that you downloaded; we'll go through the process of creating that later. 
+	-test.txt; same as above and this is created along with the train.txt file in a later process
+	-head.names: a text file that you name "whateveryouwant.names", that contains a list of the names of the objects that you are going to train yolo to detect.  Since we are only training it to detect "Human head", that file should just contain:
+		Human head
+	
+	at the top, with a space after it (not indented or anything too, just at the top left).  If you were doing this for 2 objects like Human head and Human hand, it'd be like:
+		Human head
+		Human hand
+	
+	-backup is just a folder where you want the weights to be stored.  Make sure this folder exists, and that you don't put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
+
+Note that 'sbubby' is my username, change that to yours for whatever the directories of the files you use here are located.  You can put the test.txt, train.txt, and backup folder wherever, as long as this file points to their locations.
+
+
+Create the cfg by making a copy of the existing yolov3.cfg file in the /darknet/cfg directory and naming it "whateveryouwant.cfg", I named mine "head.cfg", and put it in the same /cfg directory.
+
+Edit that new cfg as follows:
+-Line 3: set batch=16, this means we will be using 16 images for every training step
+-Line 4: set subdivisions=16, the batch will be divided by 16 to decrease GPU VRAM requirements.
+-Line 603: set filters=(numberOfclasses + 5)*3 in our case (for one object) filters=18
+-Line 610: set classes=1, the number of categories we want to detect
+-Line 689: set filters=(numberOfclasses + 5)*3 in our case filters=18
+-Line 696: set classes=1, the number of categories we want to detect
+-Line 776: set filters=(numberOfclasses + 5)*3 in our case filters=18
+-Line 783: set classes=1, the number of categories we want to detect
+
+Save that after making the changes.
+
+
+Creating the proper txt files for each image:
+
+Edit CSVheadstoTXT.py and: 
+-Change line 5 to point to the path of the annotation CSV you want to use. So for the 'training' images, if your /OIDv4_ToolKit folder is on the desktop then:
+
+	f=pd.read_csv("/home/sbubby/Desktop/OIDv4_ToolKit/OID/csv_folder/test-annotations-bbox.csv")
+
+Make sure that you change "sbubby" here to your username, and/or change the directory to wherever your test-annotations-bbox.csv file was downloaded (this is the default dl location of the csv files).
+
+**If you're prepping data to train yolo on multiple classes, see the commented-out sections below lines 7 and 30 in the script; they will tell you what you need to do.
+
+For prepping data for a single class:
+
+-Change line 7 to use the objects' LabelName.  It's set to use the LabelName for "Human head", so change this if your object is different.
+
+-Change line 36 to point to the directory to dump the txt's for each image.  So for example I created a directory called "yolotxt" and set it to:
+	/home/sbubby/Desktop/OIDv4_ToolKit/OID/Dataset/train/yolotxt/
+
+-each .txt file should have the same name as the image it corresponds to, except with ".txt" at the end, so for "00a0fd8177a1db74.jpg" you should get "00a0fd8177a1db74.txt" from this, in the /yolotxt directory above.
+-each .txt file should contain a new row for each object in the picture that it was made for, so for "00a0fd8177a1db74.jpg" which is a photo that contains two "Human head" objects, it would have a corresponding file in the /yolotxt folder called "00a0fd8177a1db74.txt" that contains:
+
+0 0.359375 0.4145835 0.07812600000000003 0.141667
+0 0.554687 0.3958335 0.09375 0.145833
+
+-the first row is 0, which is the row # (starting at 0) that the object's name is found on in your ".name" file that was made above.  Since I'm only doing one object here (Human head), this is always 0 as there's only one object in my head.names file.
+-the second row is the middle X point of the object's bounding box, found by adding XMin and XMax and dividing their sum by 2
+-the third row is the middle Y point of the object's bounding box, found by adding YMin and YMax and dividing their sum by 2
+-the fourth row is the width, found by subtracting XMin from XMax
+-the fifth row is the height, found by subtracting YMin from YMAx
+
+The script should take care of all of this for you, I'm just listing it here for refference.
+
+
+IMPORTANT TO NOTE: *MANY* other tutorials on training Yolov3 on your own datasets include x and y pixel values that have to be converted to 0-1 relative values.  So if you had a photo width of 1280, the "absolute x" value for the mid point would be 640, and the "realtive x" for the mid point would be .5 .  Open Images already uses values between 0 and 1 in their annotations, 0 being the lowest possible value in the whole photo for x or y, and 1 being the highest possible value.  These are called "relative" x and y, as they represent the grid locations of things in the photo by values of 0-1 along the x and y axies relative to a percetage of the max x or y, rather than pixel value coordinates. This is due to the fact that the photos in this huge dataset are of many different sizes.  Anyway, if you come accross tutorials claiming that you need to calculate the "relative" values, like what 714/1280 is for the mid points, DON'T DO THAT HERE!!  The data is already in the correct format!
+
+
+Create the single txt with all the images paths:
+-In the /OID/dataset/train folder, copy proccess.py and run it
+-this should dump a train.txt and test.txt that you'll need the .data file to point to.  It should just dump them both wherever proccess.py was ran.
+
+
+command to train:
+./darknet detector train cfg/head.data cfg/head.cfg darknet53.conv.74
+
+
+Note:
+If you used the above .data file example for Human head, it'd dump a .backup file into the directory that is specified by the last line in that head.data example above.  The .backup file is the pretrained weights when you stop the training, the _100.weights _200.weights files are the weights after specific intervals.  I've discovered that PJReddies appears to either not generate a new .weights after a very long time, or that 900 is the last before it stops making backups of the weights.  Either way, I normally just just the .backup file as that's the farthest it got to when you stop the training.  There are reasons to avoid over-training but I won't get into that here, just use the .backup file and if it's problematic try the others.
+
+
+To run the demo of your weights in live video after you've stopped the training, follow the instructions for compiling yolov3 with CUDA and OpenCV, then run:
+
+./darknet detector demo cfg/head.data cfg/head.cfg backup/head.backup
