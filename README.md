@@ -257,8 +257,9 @@ https://pjreddie.com/media/files/darknet53.conv.74
 
 ## Train It!
 Once all of this is complete command to train:
+```
 ./darknet detector train cfg/head.data cfg/head.cfg darknet53.conv.74
-
+```
 
 **Note: If you used the above .data file example for Human head, it'd dump a .backup file into the directory that is specified by the last line in that head.data example above.  The .backup file is the pretrained weights when you stop the training, the _100.weights _200.weights files are the weights after specific intervals.  I've discovered that PJReddies appears to either not generate a new .weights after a very long time, or that 900 is the last before it stops making backups of the weights.  Either way, I normally just just the .backup file as that's the farthest it got to when you stop the training.  There are reasons to avoid over-training but I won't get into that here, just use the .backup file and if it's problematic try the others.
 
