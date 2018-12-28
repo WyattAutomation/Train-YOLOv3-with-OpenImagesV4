@@ -127,7 +127,7 @@ We will also not be using anything but the "training" data in this guide; future
 ## Create the .data, the .cfg, and the .names files:
 
 ### .data File
-If wanted to train mine to reconize one object, 'Human head', so I created a text file in the /darknet/cfg/ directory of yolo and named it 'head.data' containing the following:
+I wanted to train mine to reconize one object, 'Human head', so I created a text file in the /darknet/cfg/ directory of yolo and named it 'head.data' containing the following:
 
 ```
 classes= 1
@@ -156,8 +156,7 @@ at the top, with a space after it (not indented or anything too, just at the top
 Human head
 Human hand
 ```
--backup is just a folder where you want the weights to be stored.  Make sure this folder exists, and that you don't
-put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
+-backup is just a folder where you want the weights files to be output to when it trains.  Make sure this folder exists, and that you don't put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
 
 Also note that 'sbubby' is my username; change that to yours for, wherever the directories of the files you use here are located on your machine.  You can put the test.txt, train.txt, and backup folder wherever, as long as this file points to their locations you're good.
 
