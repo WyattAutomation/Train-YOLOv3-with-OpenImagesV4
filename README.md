@@ -136,13 +136,14 @@ valid  = /home/sbubby/test.txt
 names = data/head.names
 backup = /home/sbubby/backup
 ```
-### .names File
 -classes is '1' as I'm only training mine to detect 'Human head'
 
 -train.txt is a single text file that lists the full directory where each photo is that you downloaded; we'll go
 through the process of creating that later. 
 
 -test.txt; same as above and this is created along with the train.txt file in a later process
+
+### .names File
 
 -head.names: a text file that you name "whateveryouwant.names", that contains a list of the names of the objects
 that you are going to train yolo to detect.  Since we are only training it to detect "Human head", that file should
