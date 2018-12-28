@@ -1,2 +1,6 @@
-# Train-YOLOv3-with-OpenImagesV4
-End-to-end tutorial on data prep and training PJReddie's YOLOv3 to detect custom objects, using Google Open Images V4 Dataset.  Includes instructions on downloading specific classes from OIv4, as well as working code examples in Python for preparing the data.
+# Training YOLOv3 to detect specific objects using Google's OpenImagesV4
+
+## Brief description:
+This is a detailed tutorial on how to download one or more specific object's photos with annotations, from Google's Open ImagesV4 Dataset, and how to fully and correctly prepare that data to train PJReddie's YOLOv3.  This how I trained this model to detect "Human head", as seen in the GIF below:
+
+![](https://i.imgur.com/dYgpwoc.gifv)
