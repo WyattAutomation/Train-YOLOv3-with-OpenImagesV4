@@ -45,10 +45,15 @@ Answer Y to all 3 of these, whenever you encounter them (it should prompt just b
 These files it asks to download are the CSV files (that I will refer to as 'annotation CSVs') that contain the information about where the objects are (the bounding boxes of the objects) in the corresponding photos you're downloading.  The important information on each row of this CSV includes:
 
 -ImageID - the name of the actual .jpg file in the dataset, without '.jpg' on the end
+
 -LabelName - a 'Label Name' which is just a label that looks like '/m/04hgtk' and represents the type of object that's in the photo.  You can open 'class-descriptions-boxable.csv' in a text editor and search for the object you want and find it's LabelName
+
 -XMin - lowest value of X for the bounding box (box that conatins object) that the object is in
+
 -XMax - highest value of X for the bounding box that the object is in
+
 -Ymin - lowest value of Y for the bounding box that the object is in
+
 -Ymax - highest value of Y for the bounding box that the object is in
 
 The other information in these CSVs, we will not use here.
