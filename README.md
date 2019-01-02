@@ -5,6 +5,9 @@ This is a detailed tutorial on how to download a specific object's photos with a
 ![Alt Text](https://github.com/WyattAutomation/Train-YOLOv3-with-OpenImagesV4/blob/master/yoloDemo.gif?raw=true)
 
 ## Getting Started
+
+**The script included in this guide only preps training data for one class of object at a time for now.  I will be updating this in a day or two to make it prep the data for multiple classes, so please bare with me!
+
 Make sure you have PJReddie's YoloV3 installed, compiled with CUDA and OpenCV, and working with your webcam for live video.  The version of YoloV3 I am using installed is from here:
 ```
 https://pjreddie.com/darknet/yolo/
@@ -121,7 +124,7 @@ OIDv4_ToolKit
 ```
 Note that it will create a directory called "labels" that we do not need, you can ignore the txt files and that directory as they are not used.  There is an option to not create them as well, but it doesn't hurt anything if they do get created.  Also note that the names in the files above are just arbitrary names here for demonstration purposes.  
 
-We will also not be using anything but the "training" data in this guide; future realeases will include how to improve the creation of trained weights using the others, but for now the only CSVs and images we will be using are the "Training" datasets.
+We will also not be using anything but the "training" data in this guide; future releases will include how to improve the creation of trained weights using the others, but for now the only CSVs and images we will be using are the "Training" datasets.
 
 
 ## Create the .data, the .cfg, and the .names files:
@@ -136,12 +139,20 @@ valid  = /home/sbubby/test.txt
 names = data/head.names
 backup = /home/sbubby/backup
 ```
--classes is '1' as I'm only training mine to detect 'Human head'
+**Note that 'sbubby' above is my username; change sbubby to your username for wherever the directories of the files you use here are going to be located on your machine, for example: /home/YourUserNameGoesHere/train.txt
 
--train.txt is a single text file that lists the full directory where each photo is that you downloaded; we'll go
+-classes is '1' as I'm only training mine to detect 'Human head'.  This is the only thing here that's a parameter, the rest are file locations.
+
+-train.txt is a single text file that lists the full directory of where each photo is that you downloaded; we'll go
 through the process of creating that later. 
 
 -test.txt; same as above and this is created along with the train.txt file in a later process
+
+-"backup" is just a folder where you want the trained weights files to be output to while it trains.  Make sure this folder exists, and that you don't put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
+
+**MAKE SURE that before you start training, all of the files that this .data file points to, end up being where where it says they need to be!!  If you have issues during training where something can't be found, make sure both the paths here are correct and the files you create in this tutorial are located at those paths!  
+
+**You can put the test.txt, train.txt, and backup folder wherever on your machine, as long as this file points to their locations and can access them  you're good (putting them in the directory of darknet is fine or /home/username/ like I did above is fine.  DON'T stick it somewhere dumb like /etc, a hidden folder, or somewhere that requires admin priviledges etc to access!!!
 
 ### .names File
 
@@ -157,11 +168,9 @@ at the top, with a space after it (not indented or anything too, just at the top
 Human head
 Human hand
 ```
--backup is just a folder where you want the weights files to be output to when it trains.  Make sure this folder exists, and that you don't put an extra "/" after /home/sbubby/backup like a lot of other tutorials say to.
 
-Also note that 'sbubby' is my username; change that to yours for, wherever the directories of the files you use here are located on your machine.  You can put the test.txt, train.txt, and backup folder wherever, as long as this file points to their locations you're good.
+-If I were using the .data file from before, I would stick this file in the ../darknet/data folder of your yolo installation.
 
-**Just make sure that before training, all of those files end up being where this file points to them!!
 
 ### .cfg File
 Create the cfg by making a copy of the existing yolov3.cfg file in the /darknet/cfg directory and naming it "whateveryouwant.cfg", I named mine "head.cfg", and put it in the same /cfg directory.
@@ -183,19 +192,19 @@ Edit that new cfg as follows:
 
 -Line 783: set classes=1, the number of categories we want to detect
 
-Save that after making the changes, sitck it in darknet/cfg.
+Save that after making the changes, and put it in your ../darknet/cfg folder of your yolo installation if it isn't there already.
 
 
 ## Creating the proper txt files for each image:
 
 ### Edit CSVheadstoTXT.py: 
--Change line 5 to point to the path of the training annotation CSV you donwloaded earlier. So for the 'training' images, if your /OIDv4_ToolKit folder is on the desktop then:
+-Change line 5 of this included python script in my repo to point to the path of the training annotation CSV you donwloaded earlier. So for the 'training' images, if your /OIDv4_ToolKit folder was on my (sbubby's) desktop then:
 ```
 f=pd.read_csv("/home/sbubby/Desktop/OIDv4_ToolKit/OID/csv_folder/train-annotations-bbox.csv")
 ```
-Make sure that you change "sbubby" here to your username, and/or change the directory to wherever your train-annotations-bbox.csv file was downloaded (this is the default dl location of the csv files).
+Make sure that you change "sbubby" here to your username, and/or change the directory to wherever your train-annotations-bbox.csv file was downloaded (this is the default dl location of the csv files if you cloned OIDv4 to your Desktop).
 
-**This script only preps training data for one class of object at a time for now.  I will be updating this in a day or two to make it prep the data for multiple classes, so please bare with me!
+**Again, this script only preps training data for one class of object at a time for now.  I will be updating this in a day or two to make it prep the data for multiple classes, so please bare with me!
 
 ## For prepping data for a single class:
 
@@ -215,9 +224,15 @@ python3 CSVheadstoTXT.py
 ```
 -This should generate all of the .txt files mentioned above.  For my example here, it dumped them all to /home/sbubby/Desktop/oiheadpics/OIDv4_ToolKit/OID/Dataset/test/yolotxt/  
 
--Once it's done, copy all those .txt files to the same directory as the .jpg files.
+-Once it's done, copy all those .txt files to the same directory as the .jpg files, so like: 
+```
+cp -r /home/sbubby/Desktop/oiheadpics/OIDv4_ToolKit/OID/Dataset/test/yolotxt/. /home/sbubby/Desktop/oiheadpics/OIDv4_ToolKit/OID/Dataset/test/Human\ head/
+```
+as the .txt's are in /yolotxt and the .jpg's are in /Human\ head ("Human\ head" is written like this as there will be a sapce in the name)
+
 
 ## Details of Info in .txt Files
+
 -Each .txt file should have the same name as the image it corresponds to, except with ".txt" at the end, so for "00a0fd8177a1db74.jpg" you should get "00a0fd8177a1db74.txt" from this, in the /yolotxt directory above.
 
 -Each .txt file should contain a new row for each object in the picture that it was made for, so for "00a0fd8177a1db74.jpg" which is a photo that contains two "Human head" objects, it would have a corresponding file in the /yolotxt folder called "00a0fd8177a1db74.txt" that contains:
@@ -225,19 +240,20 @@ python3 CSVheadstoTXT.py
 0 0.359375 0.4145835 0.07812600000000003 0.141667
 0 0.554687 0.3958335 0.09375 0.145833
 ```
--The first row is 0, which is the row # (starting at 0) that the object's name is found on in your ".name" file that was made above.  Since I'm only doing one object here (Human head), this is always 0 as there's only one object in my head.names file.
+-The first column is 0, which is the row # (starting at 0) that the object's name is found on in your ".name" file that was made above.  **If you're only training to detect ONE object, this will be 0 in every text file in every row, as there will only be one object in the head.names file.**
 -the second column is the middle X point of the object's bounding box, found by adding XMin and XMax and dividing their sum by 2
 -The third column is the middle Y point of the object's bounding box, found by adding YMin and YMax and dividing their sum by 2
 -The fourth column is the width, found by subtracting XMin from XMax
 -The fifth column is the height, found by subtracting YMin from YMAx
 
-The script should take care of all of this for you, as long as the directories are set up correctly. I'm just explaining it here for refference.
+The script should take care of all of this for you, as long as the directories are set up correctly. I'm just explaining it here for refference.  Feel free to look at the script and see how pandas is used, and what basic arithmetic is used to proccess the data; it's quite simple.
 
 
 **IMPORTANT TO NOTE: *MANY* other tutorials on training Yolov3 on your own datasets include x and y pixel values that have to be converted to 0-1 relative values.  So if you had a photo width of 1280, the "absolute x" value for the mid point would be 640, and the "realtive x" for the mid point would be .5 .  Open Images already uses values between 0 and 1 in their annotations, 0 being the lowest possible value in the whole photo for x or y, and 1 being the highest possible value.  These are called "relative" x and y, as they represent the grid locations of things in the photo by values of 0-1 along the x and y axies relative to a percetage of the max x or y, rather than pixel value coordinates. This is due to the fact that the photos in this huge dataset are of many different sizes.  Anyway, if you come accross tutorials claiming that you need to calculate the "relative" values, like what 714/1280 is for the mid points, DON'T DO THAT HERE!!  The data is already in the correct format!
 
 
 ## Create the single txt for your '.data' file, containing all the images paths:
+
 -In process.py, change line 5 to the directory where the .jpg files for the training dataset for the object are.  For me, this looked like:
 ```
 current_dir = '/home/sbubby/Desktop/OIDv4_ToolKit/train/Human head'
@@ -250,21 +266,34 @@ process.py
 
 -Copy those two files to where your .data file earlier in this Tutorial is configured to look for them 
 
+
 ## Download Weights for Convolutinal Layers
 
 -Just download this from the following link, and copy it into the root directory of yolo (/darknet):
 https://pjreddie.com/media/files/darknet53.conv.74
 
 ## Train It!
+
 Once all of this is complete command to train:
 ```
 ./darknet detector train cfg/head.data cfg/head.cfg darknet53.conv.74
 ```
 
+**If you get an error about running out of memory while it trains, you can tweak "batch=16" and "subdivisions=16", so batch is lower and subdivisions is higher.  This will make training take longer, but in this example I let it run all night (about 6 hours) with both set to 16. I may not have needed to wait that long, it may have been fine after 3: I'm not sure.  I'll reccomend with training in this guide that you test out training for about an hour, and if it hasn't stopped itself after that long (when it's working like it should, it will just keep going until you stop it), you should be good to leave it.  
+
 **Note: If you used the above .data file example for Human head, it'd dump a .backup file into the directory that is specified by the last line in that head.data example above.  The .backup file is the pretrained weights when you stop the training, the _100.weights _200.weights files are the weights after specific intervals.  I've discovered that PJReddies appears to either not generate a new .weights after a very long time, or that 900 is the last before it stops making backups of the weights.  Either way, I normally just just the .backup file as that's the farthest it got to when you stop the training.  There are reasons to avoid over-training but I won't get into that here, just use the .backup file and if it's problematic try the others.
 
+
+Start it before you go to bed, before you go to work, whatever you want just let it do it's thing and I'd suggest not using your computer while it runs..  
+
+..now's your chance, go live your LIFE, at least for several hours!..  You've been behind a screen for a minute or two if you're new to this and made it this far!
 
 To run the demo of your weights in live video after you've stopped the training, follow the instructions for compiling yolov3 with CUDA and OpenCV, then run:
 ```
 ./darknet detector demo cfg/head.data cfg/head.cfg backup/head.backup
 ```
+Should show you a window like the one at the beginning, with a feed of your webcam and bounding boxes drawn around all detected "Human heads" or whatever you trained it to detect!!  
+
+Have fun!
+
+-Gene
