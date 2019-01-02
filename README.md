@@ -6,7 +6,7 @@ This is a detailed tutorial on how to download a specific object's photos with a
 
 ## Getting Started
 
-**The script included in this guide only preps training data for one class of object at a time for now.  I will be updating this in a day or two to make it prep the data for multiple classes, so please bare with me!
+### The script included in this guide only preps training data for one class of object at a time for now.  I will be updating this in a day or two to make it prep the data for multiple classes, so please bare with me!
 
 Make sure you have PJReddie's YoloV3 installed, compiled with CUDA and OpenCV, and working with your webcam for live video.  The version of YoloV3 I am using installed is from here:
 ```
