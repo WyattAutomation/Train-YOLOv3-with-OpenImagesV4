@@ -22,7 +22,7 @@ I'm using CUDA Toolkit 10.0 with the 410 version of the NVidia Driver, on Ubuntu
 
 If you don't want to download the entire Google Open Images Dataset, and just need photos and annotations containing one or a few objects that you can seach for on their "Explore" page, I will explain how to do this first. (The 'explore' page I'm talking about is found here: https://storage.googleapis.com/openimages/web/visualizer/index.html?)
 
-## OIDv4 Tookit
+### OIDv4 Tookit
 There are several ways to do this but I will explain the easiest that I've found so far, which is by using the OIDv4toolkit, This is a downloader tool specifically made for this purpose (https://github.com/EscVM/OIDv4_ToolKit).  The documentation on their GitHub isn't entirely accurate, so please follow my instructions here!
 
 Clone the repo to whatever directory you want.  Desktop is fine:
