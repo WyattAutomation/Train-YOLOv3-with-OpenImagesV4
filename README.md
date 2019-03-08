@@ -6,7 +6,7 @@ This is a detailed tutorial on how to download a specific object's photos with a
 
 ## Getting Started
 
-### The script included in this guide only preps training data for one class of object at a time for now.  I will be updating this in a day or two to make it prep the data for multiple classes, so please bare with me!
+### This README explains how to use the CSVheadstoTXT.py to train a single class.  I have added a new script (MULTI-CLASSjpg2txt.py) that can prep data for multiple classes simulatneously.  I haven't updated the below documentation for manually prepping the config files, but the new script is commented to explain how to use it, and adding extra classes should be self-explanatory.  If it becomes apparent that is not the case, put in a ticket and I'll append it as needed. -GW
 
 Make sure you have PJReddie's YoloV3 installed, compiled with CUDA and OpenCV, and working with your webcam for live video.  The version of YoloV3 I am using installed is from here:
 ```
