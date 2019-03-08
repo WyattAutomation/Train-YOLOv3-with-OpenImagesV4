@@ -6,7 +6,7 @@ This is a detailed tutorial on how to download a specific object's photos with a
 
 ## Getting Started
 
-### This README explains how to use the CSVheadstoTXT.py script to train a single class.  I have now added a new script (MULTI-CLASSjpg2txt.py) that can prep data for multiple classes.  I haven't updated the below documentation for manually prepping the config files, but the new script is commented to explain how to use it, and adding extra classes should be self-explanatory per the below doc.  If it becomes apparent that is not the case, put in a ticket and I'll append it as needed. -GW
+### This README explains how to use the CSVheadstoTXT.py script to train YOLOv3 to detect a single object/class.  I have now added a new script (MULTI-CLASSjpg2txt.py) that can prep data for multiple classes.  I haven't updated the below documentation for manually prepping the config files, but the new script is commented to explain how to use it, and adding extra classes should be self-explanatory per the below doc.  If it becomes apparent that is not the case, put in a ticket and I'll append it as needed. -GW
 
 Make sure you have PJReddie's YoloV3 installed, compiled with CUDA and OpenCV, and working with your webcam for live video.  The version of YoloV3 I am using installed is from here:
 ```
