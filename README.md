@@ -15,7 +15,7 @@ https://pjreddie.com/darknet/yolo/
 
 You will need Pandas for Python3.6 installed as well.  
 
-I'm using CUDA Toolkit 10.0 with the 410 version of the NVidia Driver, on Ubuntu18.04, and use Python 3.6.  My GPU is an NVidia gtx 1060 (6GB model).  I won't go into details too much with getting YOLOv3 working, as that is not the intent of this document.
+I'm using CUDA Toolkit 10.0 with the 410 version of the NVidia Driver, on Ubuntu18.04, and Python 3.6.  My GPU is an NVidia gtx 1060 (6GB model).  I won't go into details too much with getting YOLOv3 working, as that is not the intent of this document.
 
 
 ## Downloading Photos Containing only Specific Classes of Objects from the Open Images Dataset:
