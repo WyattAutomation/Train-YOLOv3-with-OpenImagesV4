@@ -33,7 +33,7 @@ Check the "requirements.txt" file for the dependencies.  I would reccomend again
 
 Once you have the requirements installed, it's time to run the downloader (main.py from the root directory of the tool).
 
-Note that the correct command below uses "downloader" and not "download" like the documentation on the OIDv4 GitHub erroneously states.  Also note, if there is a space in the class name like "Human head" type it like "Human_head" below:
+Note that the correct command below uses "downloader" and not "download" like the documentation on the OIDv4 GitHub erroneously states (hah! they actually fixed that in their readme since I originally posted this..).  Also note, if there is a space in the class name like "Human head" type it like "Human_head" below:
 ```
 python3 main.py downloader --classes Human_head --type_csv all
 ```
